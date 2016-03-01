@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 logger.setLevel(logging.DEBUG)
 server_logger.setLevel(logging.DEBUG)
+logging.basicConfig()
 
 
 server = PypvServer(prefix='test_prefix:')
