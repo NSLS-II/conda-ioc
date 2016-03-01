@@ -16,5 +16,5 @@ fi
 
 echo "* Ensuring pypvserver is installed"
 pushd pypvserver
-python setup.py install
+python setup.py develop
 popd
