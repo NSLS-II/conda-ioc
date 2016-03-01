@@ -43,7 +43,6 @@ class FineSampleLabX(PseudoPositioner):
 
         x = c * position.zpssx_lab + s * position.zpssz_lab
         z = -s * position.zpssx_lab + c * position.zpssz_lab
-        print('forward', position, '->', x, z, '(theta=', theta, ')')
         return self.RealPosition(zpssx=x, zpssz=z)
 
     @real_position_argument
@@ -69,9 +68,14 @@ def setup(server):
     zp_lab = FineSampleLabX('XF:03IDC-ES', name='zp_lab')
     zp_lab.wait_for_connection()
 
-    motor_zpssx_lab = PypvMotor('{PseudoPos-ZP}zpssx_lab', zp_lab.zpssx_lab,
+    zp_lab.zpssx_lab.name = 'zpssx_lab'
+    zp_lab.zpssz_lab.name = 'zpssz_lab'
+
+    motor_zpssx_lab = PypvMotor('{PseudoPos-zpssx}Mtr', zp_lab.zpssx_lab,
+                                precision=3,
                                 server=server)
-    motor_zpssz_lab = PypvMotor('{PseudoPos-ZP}zpssz_lab', zp_lab.zpssz_lab,
+    motor_zpssz_lab = PypvMotor('{PseudoPos-zpssz}Mtr', zp_lab.zpssz_lab,
+                                precision=3,
                                 server=server)
 
     motor_zpssx_lab._move_done()
