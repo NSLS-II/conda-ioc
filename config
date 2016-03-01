@@ -1,0 +1,10 @@
+NAME=conda-ioc
+PORT=4001
+HOST=xf03id-srv1
+USER=softioc
+
+# conda-related options:
+CONDA_ENV=conda_ioc
+CONDA_ROOT=$PWD/mc
+# CONDA_ROOT=/tmp/ramdisk/condaioc
+PACKAGES=ophyd
