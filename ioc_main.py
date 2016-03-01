@@ -1,37 +1,45 @@
 import logging
 import time
 
-# import ophyd
-from pypvserver import (PypvServer, PyPV,
-                        logger as server_logger)
+from pypvserver import (PypvServer, logger as server_logger)
+
+import pseudomotors
 
 
-logger = logging.getLogger(__name__)
+def loop():
+    try:
+        while True:
+            time.sleep(1.0)
+    except KeyboardInterrupt:
+        print('Done')
 
-logger.setLevel(logging.DEBUG)
-server_logger.setLevel(logging.DEBUG)
-logging.basicConfig()
+
+def main():
+    server = PypvServer(prefix='XF:03IDC-ES')
+    info = pseudomotors.setup(server)
+
+    print('')
+    print('* PVs:')
+    for pv in info.get('pvs', []):
+        print('\t', pv)
+
+    print('')
+    print('* Positioners:')
+    for positioner in info.get('positioners', []):
+        print('\t', positioner)
+
+    print('')
+    print('* PyPV motors:')
+    for motor in info.get('pypv_motors', []):
+        print('\t', motor)
+
+    loop()
 
 
-server = PypvServer(prefix='test_prefix:')
-logger.info('Creating PV "pv1", a floating-point type')
-python_pv = PyPV('pv1', 123.0, server=server)
+if __name__ == '__main__':
+    logger = logging.getLogger(__name__)
 
-# full_pvname includes the server prefix
-pvname = python_pv.full_pvname
-logger.info('... which is %s including the server prefix', pvname)
-
-time.sleep(0.1)
-
-for value in range(10):
-    logger.info('Updating the value on the server-side to: %s', value)
-    python_pv.value = value
-    time.sleep(0.05)
-
-logger.info('Done')
-
-try:
-    while True:
-        time.sleep(1.0)
-except KeyboardInterrupt:
-    print('Done')
+    logger.setLevel(logging.DEBUG)
+    server_logger.setLevel(logging.DEBUG)
+    logging.basicConfig()
+    main()
